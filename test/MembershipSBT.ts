@@ -2,12 +2,21 @@ import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 
+const metadata = {
+  name: 'Fitness Gym Membership',
+  image: 'https://ipfs.io/ipfs/QmWU8qrJm4ByGdSSyoaqvG4YbzAm4EZFHQG7L7LLCVfwvM',
+  description:
+    'This is a membership token for the Fitness Gym. It is a soul-bound token (SBT) that can be used to redeem a 1 year membership at the Fitness Gym.',
+};
+
 describe('MembershipSBT', function () {
   async function deployMembershipSBTFixture() {
     const [owner, addr1, addr2] = await ethers.getSigners();
 
     const membershipSBT = await ethers.deployContract('MembershipSBT', [
-      owner.address,
+      'Fitness Gym Membership',
+      'FGM',
+      'https://ipfs.io/ipfs/QmVLqt2tN4NCeYdCsTg1rMeZTmT2D8spowhSnNSLuXtsM2/',
     ]);
     await membershipSBT.waitForDeployment();
 
@@ -24,12 +33,12 @@ describe('MembershipSBT', function () {
 
     it('Should set the right name', async function () {
       const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
-      expect(await membershipSBT.name()).to.equal('MembershipSBT');
+      expect(await membershipSBT.name()).to.equal('Fitness Gym Membership');
     });
 
     it('Should set the right symbol', async function () {
       const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
-      expect(await membershipSBT.symbol()).to.equal('MSBT');
+      expect(await membershipSBT.symbol()).to.equal('FGM');
     });
   });
 
@@ -40,6 +49,16 @@ describe('MembershipSBT', function () {
       );
       await membershipSBT.connect(addr1).safeMint();
       expect(await membershipSBT.balanceOf(addr1.address)).to.equal(1);
+    });
+
+    it('Should return the right tokenURI', async function () {
+      const { membershipSBT, addr1 } = await loadFixture(
+        deployMembershipSBTFixture
+      );
+      await membershipSBT.connect(addr1).safeMint();
+      expect(await membershipSBT.tokenURI(0)).to.equal(
+        'https://ipfs.io/ipfs/QmVLqt2tN4NCeYdCsTg1rMeZTmT2D8spowhSnNSLuXtsM2/0'
+      );
     });
 
     it('Should fail if minting more than one token per account', async function () {

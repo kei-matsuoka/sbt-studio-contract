@@ -7,15 +7,21 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
 contract MembershipSBT is ERC721, ERC721Pausable, Ownable, ERC721Burnable {
+    string private _baseURIextended;
     uint256 private _nextTokenId;
 
-    constructor(
-        address initialOwner
-    ) ERC721("MembershipSBT", "MSBT") Ownable(initialOwner) {}
+    event TokenMinted(address indexed minter, uint256 indexed tokenId);
 
-    function _baseURI() internal pure override returns (string memory) {
-        return
-            "https://ipfs.io/ipfs/QmVLqt2tN4NCeYdCsTg1rMeZTmT2D8spowhSnNSLuXtsM2";
+    constructor(
+        string memory name,
+        string memory symbol,
+        string memory baseURI
+    ) ERC721(name, symbol) Ownable(msg.sender) {
+        _baseURIextended = baseURI;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseURIextended;
     }
 
     function pause() public onlyOwner {
@@ -30,6 +36,7 @@ contract MembershipSBT is ERC721, ERC721Pausable, Ownable, ERC721Burnable {
         require(balanceOf(msg.sender) == 0, "You can mint only one token");
         uint256 tokenId = _nextTokenId++;
         _safeMint(msg.sender, tokenId);
+        emit TokenMinted(msg.sender, tokenId);
     }
 
     // The following functions are overrides required by Solidity.

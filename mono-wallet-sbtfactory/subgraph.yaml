@@ -1,0 +1,24 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: SBTFactory
+    network: mumbai
+    source:
+      address: "0xDd3E73Da01EFCAfF8Ad57Baa19F7dB21f99C7DC4"
+      abi: SBTFactory
+      startBlock: 42470913
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Upgraded
+      abis:
+        - name: SBTFactory
+          file: ./abis/SBTFactory.json
+      eventHandlers:
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/sbt-factory.ts
