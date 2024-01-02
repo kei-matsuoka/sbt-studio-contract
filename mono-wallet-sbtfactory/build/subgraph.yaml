@@ -1,12 +1,12 @@
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: SBTFactory
     network: mumbai
     source:
-      address: '0xb264Da2E6E7cDbc5d9Ad9C57562acc618fc78190'
+      address: "0xb264Da2E6E7cDbc5d9Ad9C57562acc618fc78190"
       abi: SBTFactory
       startBlock: 44306565
     mapping:
@@ -18,12 +18,11 @@ dataSources:
         - CreatedToken
       abis:
         - name: SBTFactory
-          file: ./abis/SBTFactory.json
+          file: SBTFactory/abis/SBTFactory.json
       eventHandlers:
         - event: SBTCreated(address,string,string,uint256,uint8,string,string)
           handler: handleSBTCreated
-      file: ./src/mapping.ts
-
+      file: SBTFactory/SBTFactory.wasm
 templates:
   - kind: ethereum
     name: MembershipSBT
@@ -39,7 +38,7 @@ templates:
         - MintedToken
       abis:
         - name: MembershipSBT
-          file: ./abis/MembershipSBT.json
+          file: MembershipSBT/abis/MembershipSBT.json
       eventHandlers:
         - event: Issued(indexed address,indexed address,indexed uint256,uint8)
           handler: handleMinted
@@ -51,4 +50,4 @@ templates:
           handler: handleMaxSupplySet
         - event: BurnAuthSet(uint256,uint8)
           handler: handleBurnAuthSet
-      file: ./src/mapping.ts
+      file: SBTFactory/SBTFactory.wasm

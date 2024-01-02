@@ -7,11 +7,14 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "./MembershipSBT.sol";
 
 contract SBTFactory is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+    uint256 public creationFee;
+
     event SBTCreated(
-        address indexed creator,
         address sbtAddress,
         string name,
         string symbol,
+        uint256 maxSupply,
+        IERC5484.BurnAuth defaultBurnAuth,
         string image,
         string description
     );
@@ -24,6 +27,7 @@ contract SBTFactory is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     function initialize() public initializer {
         __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
+        creationFee = 0.01 ether;
     }
 
     function _authorizeUpgrade(
@@ -34,18 +38,33 @@ contract SBTFactory is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         string memory name,
         string memory symbol,
         string memory baseURI,
+        uint256 maxSupply,
+        IERC5484.BurnAuth defaultBurnAuth,
         string memory image,
         string memory description
-    ) public returns (address) {
-        MembershipSBT sbt = new MembershipSBT(name, symbol, baseURI);
+    ) public payable returns (address) {
+        require(msg.value == creationFee, "Incorrect fee");
+        MembershipSBT sbt = new MembershipSBT(
+            name,
+            symbol,
+            baseURI,
+            maxSupply,
+            defaultBurnAuth,
+            msg.sender
+        );
         emit SBTCreated(
-            msg.sender,
             address(sbt),
             name,
             symbol,
+            maxSupply,
+            defaultBurnAuth,
             image,
             description
         );
         return address(sbt);
+    }
+
+    function setCreationFee(uint256 _creationFee) public onlyOwner {
+        creationFee = _creationFee;
     }
 }

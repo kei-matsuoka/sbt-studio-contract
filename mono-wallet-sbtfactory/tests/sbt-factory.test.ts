@@ -9,7 +9,7 @@ import {
 import { Address } from "@graphprotocol/graph-ts"
 import { Upgraded } from "../generated/schema"
 import { Upgraded as UpgradedEvent } from "../generated/SBTFactory/SBTFactory"
-import { handleUpgraded } from "../src/sbt-factory"
+import { handleUpgraded } from "../src/mapping"
 import { createUpgradedEvent } from "./sbt-factory-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
