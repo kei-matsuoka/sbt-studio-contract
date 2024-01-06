@@ -2,13 +2,6 @@ import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 
-const metadata = {
-  name: 'Fitness Gym Membership',
-  image: 'https://ipfs.io/ipfs/QmWU8qrJm4ByGdSSyoaqvG4YbzAm4EZFHQG7L7LLCVfwvM',
-  description:
-    'This is a membership token for the Fitness Gym. It is a soul-bound token (SBT) that can be used to redeem a 1 year membership at the Fitness Gym.',
-};
-
 const name = 'Fitness Gym Membership';
 const symbol = 'FGM';
 const baseURI =
@@ -36,22 +29,22 @@ describe('MembershipSBT', function () {
   describe('Deployment', function () {
     it('Should set the right name', async function () {
       const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
-      expect(await membershipSBT.name()).to.equal('Fitness Gym Membership');
+      expect(await membershipSBT.name()).to.equal(name);
     });
 
     it('Should set the right symbol', async function () {
       const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
-      expect(await membershipSBT.symbol()).to.equal('FGM');
+      expect(await membershipSBT.symbol()).to.equal(symbol);
     });
 
     it('Should set the right maxSupply', async function () {
       const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
-      expect(await membershipSBT.maxSupply()).to.equal(2);
+      expect(await membershipSBT.maxSupply()).to.equal(maxSupply);
     });
 
     it('Should set the right burnAuth', async function () {
       const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
-      expect(await membershipSBT.burnAuth(0)).to.equal(0);
+      expect(await membershipSBT.burnAuth(0)).to.equal(burnAuth.IssuerOnly);
     });
 
     it('Should set the right owner', async function () {
