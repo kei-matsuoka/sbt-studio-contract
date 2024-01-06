@@ -108,16 +108,6 @@ describe('MembershipSBT', function () {
       );
       await expect(membershipSBT.connect(addr1).lock(0)).to.be.reverted;
     });
-
-    it('Should not allow token transfers', async function () {
-      const { membershipSBT, addr1, addr2 } = await loadFixture(
-        deployMembershipSBTFixture
-      );
-      await membershipSBT.safeMint(addr1.address);
-      await expect(
-        membershipSBT.transferFrom(addr1.address, addr2.address, 0)
-      ).to.be.revertedWith('Token is locked');
-    });
   });
 
   describe('Minting', function () {
@@ -227,7 +217,13 @@ describe('MembershipSBT', function () {
     });
   });
 
-  describe('Burn', function () {
+  describe('Burning', function () {
+    it('Should return true if burnAuth is IssuerOnly', async function () {
+      const { membershipSBT, addr1 } = await loadFixture(
+        deployMembershipSBTFixture
+      );
+      expect(await membershipSBT.burnAuth(0)).to.equal(0);
+    });
     it('Should burn a token', async function () {
       const { membershipSBT, addr1 } = await loadFixture(
         deployMembershipSBTFixture
@@ -244,6 +240,57 @@ describe('MembershipSBT', function () {
       await membershipSBT.safeMint(addr1.address);
       await expect(membershipSBT.connect(addr1).burn(0)).to.be.revertedWith(
         'Only issuer can burn'
+      );
+    });
+  });
+
+  describe('Transferring', function () {
+    it('Should not allow token transfers', async function () {
+      const { membershipSBT, addr1, addr2 } = await loadFixture(
+        deployMembershipSBTFixture
+      );
+      await membershipSBT.safeMint(addr1.address);
+      await expect(
+        membershipSBT.transferFrom(addr1.address, addr2.address, 0)
+      ).to.be.revertedWith('Token is locked');
+    });
+  });
+
+  describe('Supports Interface', function () {
+    it('Should return true for IERC165', async function () {
+      const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
+      expect(await membershipSBT.supportsInterface('0x01ffc9a7')).to.equal(
+        true
+      );
+    });
+    it('Should return true for IERC721', async function () {
+      const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
+      expect(await membershipSBT.supportsInterface('0x80ac58cd')).to.equal(
+        true
+      );
+    });
+    it('Should return true for IERC721Metadata', async function () {
+      const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
+      expect(await membershipSBT.supportsInterface('0x5b5e139f')).to.equal(
+        true
+      );
+    });
+    it('Should return true for IERC5192', async function () {
+      const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
+      expect(await membershipSBT.supportsInterface('0xb45a3c0e')).to.equal(
+        true
+      );
+    });
+    it('Should return true for IERC5484', async function () {
+      const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
+      expect(await membershipSBT.supportsInterface('0x01ffc9a7')).to.equal(
+        true
+      );
+    });
+    it('Should return false for random interface', async function () {
+      const { membershipSBT } = await loadFixture(deployMembershipSBTFixture);
+      expect(await membershipSBT.supportsInterface('0x00000000')).to.equal(
+        false
       );
     });
   });
