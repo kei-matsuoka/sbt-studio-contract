@@ -19,7 +19,7 @@ async function main() {
 
   const tx = await sbtFactoryProxy.upgradeToAndCall(
     sbtFactory.target,
-    sbtFactory.interface.encodeFunctionData('owner'),
+    sbtFactory.interface.encodeFunctionData('owner')
   );
   await tx.wait();
   console.log('SBTFactory has been upgraded, transaction:', tx.hash);
