@@ -2,7 +2,7 @@ import { SBTCreated } from '../generated/SBTFactory/SBTFactory';
 import { Creator, CreatedToken, Minter } from '../generated/schema';
 import {
   BaseURISet,
-  BurnAuthSet,
+  DefaultBurnAuthSet,
   Issued,
   MaxSupplySet,
   Transfer,
@@ -94,12 +94,12 @@ export function handleMaxSupplySet(event: MaxSupplySet): void {
   }
 }
 
-export function handleBurnAuthSet(event: BurnAuthSet): void {
+export function handleDefaultBurnAuthSet(event: DefaultBurnAuthSet): void {
   let sbtAddress = event.address.toHexString();
   let token = CreatedToken.load(sbtAddress);
 
   if (token) {
-    token.burnAuth = event.params.burnAuth;
+    token.burnAuth = event.params.defaultBurnAuth;
     token.save();
   }
 }

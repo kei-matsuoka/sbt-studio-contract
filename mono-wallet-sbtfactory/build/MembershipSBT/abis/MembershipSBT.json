@@ -240,18 +240,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
         "internalType": "enum IERC5484.BurnAuth",
-        "name": "burnAuth",
+        "name": "defaultBurnAuth",
         "type": "uint8"
       }
     ],
-    "name": "BurnAuthSet",
+    "name": "DefaultBurnAuthSet",
     "type": "event"
   },
   {
@@ -657,27 +651,19 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "approved",
-        "type": "bool"
-      }
-    ],
-    "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "string",
         "name": "baseURI",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxSupply",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum IERC5484.BurnAuth",
+        "name": "defaultBurnAuth",
+        "type": "uint8"
       },
       {
         "internalType": "string",
@@ -690,7 +676,7 @@
         "type": "string"
       }
     ],
-    "name": "setBaseURI",
+    "name": "setAll",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -698,30 +684,17 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
       },
       {
-        "internalType": "enum IERC5484.BurnAuth",
-        "name": "_burnAuth",
-        "type": "uint8"
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
       }
     ],
-    "name": "setBurnAuth",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_maxSupply",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMaxSupply",
+    "name": "setApprovalForAll",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

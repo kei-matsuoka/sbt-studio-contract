@@ -88,25 +88,21 @@ export class BaseURISet__Params {
   }
 }
 
-export class BurnAuthSet extends ethereum.Event {
-  get params(): BurnAuthSet__Params {
-    return new BurnAuthSet__Params(this);
+export class DefaultBurnAuthSet extends ethereum.Event {
+  get params(): DefaultBurnAuthSet__Params {
+    return new DefaultBurnAuthSet__Params(this);
   }
 }
 
-export class BurnAuthSet__Params {
-  _event: BurnAuthSet;
+export class DefaultBurnAuthSet__Params {
+  _event: DefaultBurnAuthSet;
 
-  constructor(event: BurnAuthSet) {
+  constructor(event: DefaultBurnAuthSet) {
     this._event = event;
   }
 
-  get tokenId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get burnAuth(): i32 {
-    return this._event.parameters[1].value.toI32();
+  get defaultBurnAuth(): i32 {
+    return this._event.parameters[0].value.toI32();
   }
 }
 
@@ -783,6 +779,52 @@ export class SafeTransferFrom1Call__Outputs {
   }
 }
 
+export class SetAllCall extends ethereum.Call {
+  get inputs(): SetAllCall__Inputs {
+    return new SetAllCall__Inputs(this);
+  }
+
+  get outputs(): SetAllCall__Outputs {
+    return new SetAllCall__Outputs(this);
+  }
+}
+
+export class SetAllCall__Inputs {
+  _call: SetAllCall;
+
+  constructor(call: SetAllCall) {
+    this._call = call;
+  }
+
+  get baseURI(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get _maxSupply(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get defaultBurnAuth(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
+
+  get image(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+
+  get description(): string {
+    return this._call.inputValues[4].value.toString();
+  }
+}
+
+export class SetAllCall__Outputs {
+  _call: SetAllCall;
+
+  constructor(call: SetAllCall) {
+    this._call = call;
+  }
+}
+
 export class SetApprovalForAllCall extends ethereum.Call {
   get inputs(): SetApprovalForAllCall__Inputs {
     return new SetApprovalForAllCall__Inputs(this);
@@ -813,108 +855,6 @@ export class SetApprovalForAllCall__Outputs {
   _call: SetApprovalForAllCall;
 
   constructor(call: SetApprovalForAllCall) {
-    this._call = call;
-  }
-}
-
-export class SetBaseURICall extends ethereum.Call {
-  get inputs(): SetBaseURICall__Inputs {
-    return new SetBaseURICall__Inputs(this);
-  }
-
-  get outputs(): SetBaseURICall__Outputs {
-    return new SetBaseURICall__Outputs(this);
-  }
-}
-
-export class SetBaseURICall__Inputs {
-  _call: SetBaseURICall;
-
-  constructor(call: SetBaseURICall) {
-    this._call = call;
-  }
-
-  get baseURI(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get image(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get description(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-}
-
-export class SetBaseURICall__Outputs {
-  _call: SetBaseURICall;
-
-  constructor(call: SetBaseURICall) {
-    this._call = call;
-  }
-}
-
-export class SetBurnAuthCall extends ethereum.Call {
-  get inputs(): SetBurnAuthCall__Inputs {
-    return new SetBurnAuthCall__Inputs(this);
-  }
-
-  get outputs(): SetBurnAuthCall__Outputs {
-    return new SetBurnAuthCall__Outputs(this);
-  }
-}
-
-export class SetBurnAuthCall__Inputs {
-  _call: SetBurnAuthCall;
-
-  constructor(call: SetBurnAuthCall) {
-    this._call = call;
-  }
-
-  get _tokenId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get _burnAuth(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-}
-
-export class SetBurnAuthCall__Outputs {
-  _call: SetBurnAuthCall;
-
-  constructor(call: SetBurnAuthCall) {
-    this._call = call;
-  }
-}
-
-export class SetMaxSupplyCall extends ethereum.Call {
-  get inputs(): SetMaxSupplyCall__Inputs {
-    return new SetMaxSupplyCall__Inputs(this);
-  }
-
-  get outputs(): SetMaxSupplyCall__Outputs {
-    return new SetMaxSupplyCall__Outputs(this);
-  }
-}
-
-export class SetMaxSupplyCall__Inputs {
-  _call: SetMaxSupplyCall;
-
-  constructor(call: SetMaxSupplyCall) {
-    this._call = call;
-  }
-
-  get _maxSupply(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetMaxSupplyCall__Outputs {
-  _call: SetMaxSupplyCall;
-
-  constructor(call: SetMaxSupplyCall) {
     this._call = call;
   }
 }

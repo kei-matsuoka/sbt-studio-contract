@@ -6,9 +6,9 @@ dataSources:
     name: SBTFactory
     network: mumbai
     source:
-      address: "0xb264Da2E6E7cDbc5d9Ad9C57562acc618fc78190"
+      address: "0x80bE32C2549Fb64DDafBe34139C7D75A2BB865bf"
       abi: SBTFactory
-      startBlock: 44306565
+      startBlock: 44452656
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -48,6 +48,6 @@ templates:
           handler: handleBaseURISet
         - event: MaxSupplySet(uint256)
           handler: handleMaxSupplySet
-        - event: BurnAuthSet(uint256,uint8)
-          handler: handleBurnAuthSet
+        - event: DefaultBurnAuthSet(uint8)
+          handler: handleDefaultBurnAuthSet
       file: SBTFactory/SBTFactory.wasm
