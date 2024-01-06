@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./IERC5192.sol";
 import "./IERC5484.sol";
 
+// MembershipSBT is a contract for creating non-transferable membership tokens.
 contract MembershipSBT is ERC721, Ownable, IERC5192, IERC5484 {
     string private _baseURIextended;
     uint256 public maxSupply;
@@ -14,12 +15,12 @@ contract MembershipSBT is ERC721, Ownable, IERC5192, IERC5484 {
     BurnAuth private _defaultBurnAuth;
     mapping(uint256 => BurnAuth) private _burnAuths;
 
+    // Events for logging state changes.
     event BaseURISet(string baseURI, string image, string description);
-
     event MaxSupplySet(uint256 maxSupply);
+    event DefaultBurnAuthSet(BurnAuth defaultBurnAuth);
 
-    event BurnAuthSet(uint256 tokenId, BurnAuth burnAuth);
-
+    // Constructor initializes the contract with provided parameters.
     constructor(
         string memory name,
         string memory symbol,
@@ -33,27 +34,29 @@ contract MembershipSBT is ERC721, Ownable, IERC5192, IERC5484 {
         _defaultBurnAuth = defaultBurnAuth;
     }
 
-    // baseURI
+    // _baseURI returns the base URI set for the tokens.
     function _baseURI() internal view override returns (string memory) {
         return _baseURIextended;
     }
 
-    // lock
+    // locked checks if a token is locked (non-transferable).
     function locked(uint256 tokenId) public view override returns (bool) {
         return _locks[tokenId];
     }
 
+    // lock locks a token, making it non-transferable.
     function lock(uint256 tokenId) public onlyOwner {
         _locks[tokenId] = true;
         emit Locked(tokenId);
     }
 
+    // unlock unlocks a token, allowing transfer.
     function unlock(uint256 tokenId) public onlyOwner {
         _locks[tokenId] = false;
         emit Unlocked(tokenId);
     }
 
-    // mint
+    // safeMint mints a new token to a given address.
     function safeMint(address to) public onlyOwner {
         require(balanceOf(to) == 0, "You can mint only one token");
         require(
@@ -67,19 +70,21 @@ contract MembershipSBT is ERC721, Ownable, IERC5192, IERC5484 {
         emit Issued(msg.sender, to, tokenId, _burnAuths[tokenId]);
     }
 
+    // safeMintBatch mints tokens to multiple addresses.
     function safeMintBatch(address[] memory to) public onlyOwner {
         for (uint256 i = 0; i < to.length; i++) {
             safeMint(to[i]);
         }
     }
 
-    // burn
+    // burnAuth returns the burn authorization type for a token.
     function burnAuth(
         uint256 tokenId
     ) external view override returns (BurnAuth) {
         return _burnAuths[tokenId];
     }
 
+    // burn allows burning of a token based on the burn authorization.
     function burn(uint256 tokenId) public {
         BurnAuth auth = _burnAuths[tokenId];
         if (auth == BurnAuth.IssuerOnly) {
@@ -97,34 +102,41 @@ contract MembershipSBT is ERC721, Ownable, IERC5192, IERC5484 {
         if (auth == BurnAuth.Neither) {
             revert("Burning not allowed");
         }
-
         _burn(tokenId);
     }
 
-    // setFunctions
-    function setBaseURI(
+    // setAll updates various parameters of the contract.
+    function setAll(
         string memory baseURI,
+        uint256 _maxSupply,
+        BurnAuth defaultBurnAuth,
         string memory image,
         string memory description
     ) public onlyOwner {
-        _baseURIextended = baseURI;
-        emit BaseURISet(baseURI, image, description);
+        // Update base URI if it has changed.
+        if (
+            keccak256(abi.encodePacked(_baseURI())) !=
+            keccak256(abi.encodePacked(baseURI))
+        ) {
+            _baseURIextended = baseURI;
+            emit BaseURISet(baseURI, image, description);
+        }
+        // Update max supply if it has changed.
+        if (maxSupply != _maxSupply) {
+            maxSupply = _maxSupply;
+            emit MaxSupplySet(_maxSupply);
+        }
+        // Update default burn authorization if it has changed.
+        if (_defaultBurnAuth != defaultBurnAuth) {
+            _defaultBurnAuth = defaultBurnAuth;
+            for (uint256 i = 0; i < _nextTokenId; i++) {
+                _burnAuths[i] = defaultBurnAuth;
+            }
+            emit DefaultBurnAuthSet(defaultBurnAuth);
+        }
     }
 
-    function setMaxSupply(uint256 _maxSupply) public onlyOwner {
-        maxSupply = _maxSupply;
-        emit MaxSupplySet(_maxSupply);
-    }
-
-    function setBurnAuth(
-        uint256 _tokenId,
-        BurnAuth _burnAuth
-    ) public onlyOwner {
-        _burnAuths[_tokenId] = _burnAuth;
-        emit BurnAuthSet(_tokenId, _burnAuth);
-    }
-
-    // supportsInterface
+    // supportsInterface checks if the contract supports certain interfaces.
     function supportsInterface(
         bytes4 interfaceId
     ) public view virtual override(ERC721) returns (bool) {
@@ -134,7 +146,7 @@ contract MembershipSBT is ERC721, Ownable, IERC5192, IERC5484 {
             super.supportsInterface(interfaceId);
     }
 
-    // update
+    // _update overrides ERC721's _update to incorporate token lock logic.
     function _update(
         address to,
         uint256 tokenId,
