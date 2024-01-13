@@ -19,7 +19,7 @@ async function main() {
   // SBTFactoryを取得
   const sbtFactory = await ethers.getContractAt(
     'SBTFactory',
-    '0xb264Da2E6E7cDbc5d9Ad9C57562acc618fc78190'
+    '0x80bE32C2549Fb64DDafBe34139C7D75A2BB865bf'
   );
 
   // createMembershipSBT
