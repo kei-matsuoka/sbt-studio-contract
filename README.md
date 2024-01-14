@@ -1,14 +1,26 @@
-# Sample Hardhat Project
+# SBT Studio
+SBT（ソウルバウンドトークン）を発行・管理できるシステムです。   
+ブロックチェーン上に誰でも簡単に会員証やクーポン等を発行できます。   
+当リポジトリはシステムのコントラクト部分で、フロントエンド部分のリポジトリは[こちら](https://github.com/kei-matsuoka/sbt-studio)です。   
+対応しているチェーンはPolygon Mumbaiです。
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+URL：[https://mono-walet-for-business.vercel.app/](https://mono-walet-for-business.vercel.app/)
 
-Try running some of the following tasks:
+<img width="922" alt="画像②" src="https://github.com/kei-matsuoka/sbt-studio/assets/46675472/dcb89947-fecb-4cd9-9fe0-0e19da998021">
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
-# mono-wallet-contract
+## 主な使用技術
+- 言語
+  - TypeScript
+  - Solidity
+- フレームワーク
+  - Hardhat
+- 主なライブラリ
+  - @openzeppelin/contracts
+  - @openzeppelin/contracts-upgradeable
+  - @graphprotocol/graph-cli
+  - @graphprotocol/graph-ts
+- その他
+  - The Graph
+
+## コントラクト構成図
+![SBTStudioコントラクト構成図](https://github.com/kei-matsuoka/sbt-studio-contract/assets/46675472/40baffd9-0d7a-439f-8e1e-e94ab646cdd1)
